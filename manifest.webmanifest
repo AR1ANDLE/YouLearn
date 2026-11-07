@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Learn / YouCode — Learning workspace",
+  "short_name": "Learn YouCode",
+  "description": "Your first-year roadmap, flashcards, quizzes and personal learning tasks.",
+  "start_url": "./#welcome",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f6f3eb",
+  "theme_color": "#f6f3eb",
+  "categories": ["education", "productivity"],
+  "icons": [
+    {"src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}

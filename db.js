@@ -1,0 +1,11 @@
+const DB_NAME='youlearn-study-workspace';
+const STORE='workspace';
+const KEY='primary';
+const fallbackKey='youlearn-study-workspace-v1';
+let dbPromise;
+export function freshState(){return {version:1,profile:{username:'youcode-learner',fullName:'YouCode learner',email:'',picture:'',goal:'Build a project I am proud to share',language:'English'},settings:{theme:'light',dailyGoal:30,shortcuts:[{id:'simplon',name:'Simplon Maghreb',url:'https://simplon.ma/',icon:'⌂',description:'Explore the Simplon Maghreb public platform.'},{id:'youcode',name:'YouCode intranet',url:'https://intranet.youcode.ma/login',icon:'Y',description:'Open the verified YouCode student sign-in page.'},{id:'jira',name:'Jira workspace',url:'',icon:'▦',description:'Add your personal Jira workspace URL in settings.'}]},progress:{},competencyProgress:{},mastery:{},userResources:{},decks:[],flashcards:[],reviews:[],tasks:[],quizAttempts:[],activity:[],admin:{}}}
+function openDb(){if(!('indexedDB'in window))return Promise.resolve(null);if(!dbPromise)dbPromise=new Promise(resolve=>{const req=indexedDB.open(DB_NAME,1);req.onupgradeneeded=()=>{if(!req.result.objectStoreNames.contains(STORE))req.result.createObjectStore(STORE)};req.onsuccess=()=>resolve(req.result);req.onerror=()=>resolve(null);req.onblocked=()=>resolve(null)});return dbPromise}
+export async function loadState(){const db=await openDb();if(db)return new Promise(resolve=>{const req=db.transaction(STORE,'readonly').objectStore(STORE).get(KEY);req.onsuccess=()=>{const saved=req.result;if(saved){resolve(saved);return}const initial=freshState();resolve(initial);saveState(initial)};req.onerror=()=>resolve(fallback())});const state=fallback();return state}
+function fallback(){try{return {...freshState(),...JSON.parse(localStorage.getItem(fallbackKey)||'{}')}}catch{return freshState()}}
+export async function saveState(state){const db=await openDb();if(db)return new Promise(resolve=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(state,KEY);tx.oncomplete=()=>resolve(true);tx.onerror=()=>resolve(false)});try{localStorage.setItem(fallbackKey,JSON.stringify(state));return true}catch{return false}}
+export function isIndexedDbAvailable(){return 'indexedDB'in window}

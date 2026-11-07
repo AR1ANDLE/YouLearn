@@ -1,0 +1,12 @@
+{
+  "name": "learn-youcode-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Offline-first YouCode learning workspace prototype",
+  "scripts": {
+    "start": "node server.mjs",
+    "test": "node --test tests/*.test.js",
+    "check": "node --check app.js && node --check curriculum.js && node --check db.js && node --check sw.js"
+  }
+}
